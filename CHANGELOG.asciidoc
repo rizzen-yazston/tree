@@ -1,0 +1,14 @@
+= Changelog
+Rizzen Yazston
+
+== tree 0.0.0 (2022-11-06)
+
+* The `tree` project's Git repository initialised with:
+
+** .gitignore
+
+** LICENSE-BSD-3-Clause
+
+** README.asciidoc
+
+** CHANGELOG.asciidoc

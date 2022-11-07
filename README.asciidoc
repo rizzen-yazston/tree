@@ -1,0 +1,31 @@
+= Internationalisation
+Rizzen Yazston
+
+Welcome to the Tree project.
+
+A simple generic tree structure containing data nodes. The `tree` crate provides the `Tree` struct and the `Node` trait.
+
+As the `Tree` is generic in design, it mainly has methods for the manipulation of the tree structure, though does also provide convenient methods for directly accessing the various properties of the `Node`s.
+
+The repository contains only the `tree` crate.
+
+Note:: The crate on `crates.io` has its name appended with the suffix `-rizzen-yazston` to distinguish them from other tree creates by other authors.
+
+== Usage
+
+Simply include the `tree-rizzen-yazston` crate in the `Cargo.toml` to make it available to the application or library. Due to its simple design there is no configuration required.
+
+=== Cargo.toml
+
+```
+[dependencies]
+tree-rizzen-yazston = "0.0.0"
+```
+
+=== Examples
+
+```
+use tree::*;
+```
+
+ 

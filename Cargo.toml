@@ -4,11 +4,11 @@
 [package]
 # suffix '-rizzen-yazston' appended to prevent package name clashes on 'crates.io'
 name = "tree-rizzen-yazston"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Rizzen Yazston"]
 edition = "2021"
 rust-version = "1.65.0"
-description = "A Simple Tree Library"
+description = "A Simple Tree Library using Any trait for data."
 license = "BSD-3-Clause"
 readme = "README.asciidoc"
 # false prevents publishing while developing, else string of repository identfier
@@ -26,11 +26,8 @@ publish = false
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-# only used if package resides outside of workspace.
-
 [dependencies]
-# add as required.
-
+# None.
 
 # for [lib] and [[bin]], ensure name is present to prevent package name from being used.
 # name without the '-rizzen-yazston' suffix

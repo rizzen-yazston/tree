@@ -3,9 +3,7 @@ Rizzen Yazston
 
 Welcome to the Tree project.
 
-A simple generic tree structure containing data nodes. The `tree` crate provides the `Tree` struct and the `Node` trait.
-
-As the `Tree` is generic in design, it mainly has methods for the manipulation of the tree structure, though does also provide convenient methods for directly accessing the various properties of the `Node`s.
+A simple generic tree structure containing data nodes. The `tree` crate provides the `Tree` struct, that can store data that implements the `Any` trait. Methods are provided for the manipulation of the tree structure, and obtaining information regarding the tree structure and its nodes. Manipulating the data of the nodes is done by one method `data_mut`, which simply provides a mutable reference to the vector containing the data. `data` method is just an immutable reference if reading is only required. There is also a field of the node for specifying the type of node stored in the tree, though it is not used internally by the various `Tree` methods. It can be read, and any type can be used if it implements the `Any` trait.
 
 The repository contains only the `tree` crate.
 
@@ -25,7 +23,37 @@ tree-rizzen-yazston = "0.0.0"
 === Examples
 
 ```
-use tree::*;
+use tree::{NodeFeatures, Tree};
+
+enum Nodes {
+    Root,
+    Statement,
+    Equal,
+    Divide,
+    Add,
+    Leaf,
+}
+
+let mut tree = Tree::new();
+let no_data = NodeFeatures { allow_children: true, allow_data: false };
+let variable = NodeFeatures { allow_children: false, allow_data: true };
+
+// Build tree of one statement: z = (x + y) / 2
+// Just ignoring the `Result` using .ok() as this is a trivial example.
+let mut index = tree.insert( 300, no_data.clone(), Box::new( Nodes::Root ) ).unwrap();
+tree.insert( index, no_data.clone(), Box::new( Nodes::Statement ) ).ok();
+tree.insert( 1, no_data.clone(), Box::new( Nodes::Equal ) ).ok();
+index = tree.insert( 2, variable.clone(), Box::new( Nodes::Leaf ) ).unwrap();
+tree.data_mut( index ).unwrap().push( Box::new( "z".to_string() ) );
+tree.insert( 2, no_data.clone(), Box::new( Nodes::Divide ) ).ok();
+tree.insert( 4, no_data.clone(), Box::new( Nodes::Add ) ).ok();
+index = tree.insert( 5, variable.clone(), Box::new( Nodes::Leaf ) ).unwrap();
+tree.data_mut( index ).unwrap().push( Box::new( "x".to_string() ) );
+index = tree.insert( 5, variable.clone(), Box::new( Nodes::Leaf ) ).unwrap();
+tree.data_mut( index ).unwrap().push( Box::new( "y".to_string() ) );
+index = tree.insert( 4, variable.clone(), Box::new( Nodes::Leaf ) ).unwrap();
+tree.data_mut( index ).unwrap().push( Box::new( "2".to_string() ) );
+assert_eq!( tree.count(), 9, "9 nodes are present." );
 ```
 
  

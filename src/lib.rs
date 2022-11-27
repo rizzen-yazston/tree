@@ -56,7 +56,7 @@ use core::any::Any;
 /// # Examples
 /// 
 /// See the example for `Tree` on usage.
-#[derive( Clone, Debug )]
+#[derive( Clone )]
 pub struct NodeFeatures {
     pub allow_children: bool,
     pub allow_data: bool,
@@ -279,9 +279,9 @@ impl Tree {
                     return Err( "Failed to retrieve parent node.".to_string() )
                 };
                 let children = parent_node.children.as_mut().unwrap();
-                let Some( _position ) = children.iter().position( |&x| x == parent ) else {
+                let Some( _position ) = children.iter().position( |&x| x == node_index ) else {
                     // Serious integrity issue.
-                    return Err( "Index node as missing in the parent node's children.".to_string() );
+                    return Err( "Index node is missing in the parent node's children.".to_string() );
                 };
                 children.remove( _position );
             }
@@ -328,9 +328,9 @@ impl Tree {
                     return Err( "Failed to retrieve parent node.".to_string() )
                 };
                 let children = parent_node.children.as_mut().unwrap();
-                let Some( _position ) = children.iter().position( |&x| x == parent ) else {
+                let Some( _position ) = children.iter().position( |&x| x == node_index ) else {
                     // Serious integrity issue.
-                    return Err( "Index node as missing in the parent node's children.".to_string() );
+                    return Err( "Index node is missing in the parent node's children.".to_string() );
                 };
                 children.remove( _position );
             }
@@ -505,6 +505,26 @@ impl Tree {
                 return Err( "Failed to retrieve node.".to_string() );
             }
         }
+    }
+
+    /// Get length of internal vector of nodes, including the deleted nodes.
+    /// 
+    /// # Examples
+    /// ```
+    /// use tree::{NodeFeatures, Tree};
+    /// 
+    /// let mut tree = Tree::new();
+    /// tree.insert( 297, NodeFeatures { allow_children: true, allow_data: true }, Box::new( 0 ) ).ok();
+    /// tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+    /// match tree.delete( 1 ) {
+    ///     Err( error ) => println!( "{}", error ),
+    ///     Ok( _ ) => println!( "Succeeded to delete node." )
+    /// }
+    /// assert_eq!( tree.count(), 1, "Has 1 node." );
+    /// assert_eq!( tree.len(), 2, "Internal vector is 2." );
+    /// ```
+    pub fn len( &self ) -> usize {
+        self.nodes.len()
     }
 
     /// Count the nodes of the tree.

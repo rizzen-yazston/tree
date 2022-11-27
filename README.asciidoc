@@ -3,7 +3,7 @@ Rizzen Yazston
 
 Welcome to the Tree project.
 
-A simple generic tree structure containing data nodes. The `tree` crate provides the `Tree` struct, that can store data that implements the `Any` trait. Methods are provided for the manipulation of the tree structure, and obtaining information regarding the tree structure and its nodes. Manipulating the data of the nodes is done by one method `data_mut`, which simply provides a mutable reference to the vector containing the data. `data` method is just an immutable reference if reading is only required. There is also a field of the node for specifying the type of node stored in the tree, though it is not used internally by the various `Tree` methods. It can be read, and any type can be used if it implements the `Any` trait.
+A simple generic tree structure containing data nodes. The `tree` crate provides the `Tree` struct, which can store data that implements the `Any` trait. Methods are provided for the manipulation of the tree structure, and obtaining information regarding the tree structure and its nodes. Manipulating the data of the nodes is done by one method `data_mut`, which simply provides a mutable reference to the vector containing the data. `data` method is just an immutable reference if reading is only required. There is also a field of the node for specifying the type of node stored in the tree, though it is not used internally by the various `Tree` methods. It can be read, and any type can be used if it implements the `Any` trait.
 
 The repository contains only the `tree` crate.
 
@@ -17,7 +17,7 @@ Simply include the `tree-rizzen-yazston` crate in the `Cargo.toml` to make it av
 
 ```
 [dependencies]
-tree-rizzen-yazston = "0.1.0"
+tree-rizzen-yazston = "0.2.0"
 ```
 
 === Examples

@@ -3,7 +3,7 @@
 
 //! Welcome to the Tree project.
 //! 
-//! A simple generic tree structure containing data nodes. The `tree` crate provides the `Tree` struct, that can store
+//! A simple generic tree structure containing data nodes. The `tree` crate provides the `Tree` struct, which can store
 //! data that implements the `Any` trait. Methods are provided for the manipulation of the tree structure, and obtaining
 //! information regarding the tree structure and its nodes. Manipulating the data of the nodes is done by one method
 //! `data_mut`, which simply provides a mutable reference to the vector containing the data. `data` method is just an

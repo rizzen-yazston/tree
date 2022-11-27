@@ -162,24 +162,33 @@ impl Tree {
         if features.allow_data {
             data = Some( Vec::<Box<dyn Any>>::new() );
         }
-        let node = Node {
+        let node = Some( Box::new( Node {
             node_type,
             features,
             parent,
             children,
             data,
-        };
-        let index = self.nodes.len();
-        self.nodes.push( Some( Box::new( node ) ) );
+        } ) );
+        let mut _index = 0;
+        match self.nodes.iter().position( |x| x.is_none() ) {
+            None => {
+                _index = self.nodes.len();
+                self.nodes.push( node );
+            },
+            Some( position ) => {
+                _index = position;
+                *self.nodes.get_mut( position ).unwrap() = node; 
+            }
+        }
         if self.root.is_none() {
-            self.root = Some( index );
+            self.root = Some( _index );
         } else {
             let Some( index_node ) = self.node_mut( node_index ) else {
                 return Err( "Failed to retrieve index node.".to_string() )
             };
-            index_node.children.as_mut().unwrap().push( index );
+            index_node.children.as_mut().unwrap().push( _index );
         }
-        Ok( index )
+        Ok( _index )
     }
 
     /// Create a node and insert as a child to the `node_index` node at the `position` specified. The `position` must be
@@ -226,24 +235,33 @@ impl Tree {
         if features.allow_data {
             data = Some( Vec::<Box<dyn Any>>::new() );
         }
-        let node = Node {
+        let node = Some( Box::new( Node {
             node_type,
             features,
             parent,
             children,
             data,
-        };
-        let index = self.nodes.len();
-        self.nodes.push( Some( Box::new( node ) ) );
+        } ) );
+        let mut _index = 0;
+        match self.nodes.iter().position( |x| x.is_none() ) {
+            None => {
+                _index = self.nodes.len();
+                self.nodes.push( node );
+            },
+            Some( position ) => {
+                _index = position;
+                *self.nodes.get_mut( position ).unwrap() = node; 
+            }
+        }
         if self.root.is_none() {
-            self.root = Some( index );
+            self.root = Some( _index );
         } else {
             let Some( index_node ) = self.node_mut( node_index ) else {
                 return Err( "Failed to retrieve index node.".to_string() )
             };
-            index_node.children.as_mut().unwrap().insert( position, index );
+            index_node.children.as_mut().unwrap().insert( position, _index );
         }
-        Ok( index )
+        Ok( _index )
     }
 
     /// Deletes a node from the tree, discarding any data in the node.
@@ -773,5 +791,23 @@ mod tests {
         let data_vec_ref = tree.data_ref( 0 ).ok().unwrap();
         let data = data_vec_ref.get( 0 ).unwrap().downcast_ref::<String>().unwrap();
         assert_eq!( *data, "String data".to_string() );
+    }
+
+    #[test]
+    fn insert_uses_delete_node() {
+        let mut tree = Tree::new();
+        tree.insert( 338, NodeFeatures { allow_children: true, allow_data: true }, Box::new( 0 ) ).ok();
+        tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+        tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+        tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+        assert_eq!( tree.count(), 4, "4 nodes are present." );
+        assert_eq!( tree.len(), 4, "Node vector length is 4." );
+        tree.delete( 1 ).ok();
+        tree.delete( 2 ).ok();
+        tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+        assert_eq!( tree.count(), 3, "3 nodes are present." );
+        assert_eq!( tree.len(), 4, "Node vector length is 4." );
+        assert!( !tree.exists( 2 ), "Position 2 is None." );
+        assert!( tree.exists( 3 ), "Position 3 is node." );
     }
 }

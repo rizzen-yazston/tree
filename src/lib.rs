@@ -494,6 +494,72 @@ impl Tree {
         Ok( &index_node.children.as_ref().unwrap() )
     }
 
+    /// Convenience method to obtain the node index of the first child.
+    /// If node does not exists, `Err( String )` is returned.
+    /// Also `Err( String )` is returned is the node does not allow children.
+    /// 
+    /// # Examples
+    /// ```
+    /// use tree::{NodeFeatures, Tree};
+    /// 
+    /// let mut tree = Tree::new();
+    /// tree.insert( 624, NodeFeatures { allow_children: true, allow_data: true }, Box::new( 0 ) ).ok();
+    /// tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+    /// let first = tree.first( 0 ).ok().unwrap();
+    /// assert_eq!( first, 1, "First child is index 1." );
+    /// ```
+    pub fn first( &self, node_index: usize ) -> Result<usize, String> {
+        let children = self.children( node_index )?;
+        let Some( index ) = children.first() else {
+            return Err( "Has no children".to_string() )
+        };
+        Ok( *index )
+    }
+
+    /// Convenience method to obtain the node index of the last child.
+    /// If node does not exists, `Err( String )` is returned.
+    /// Also `Err( String )` is returned is the node does not allow children.
+    /// 
+    /// # Examples
+    /// ```
+    /// use tree::{NodeFeatures, Tree};
+    /// 
+    /// let mut tree = Tree::new();
+    /// tree.insert( 624, NodeFeatures { allow_children: true, allow_data: true }, Box::new( 0 ) ).ok();
+    /// tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+    /// let last = tree.last( 0 ).ok().unwrap();
+    /// assert_eq!( last, 1, "Last child is index 1." );
+    /// ```
+    pub fn last( &self, node_index: usize ) -> Result<usize, String> {
+        let children = self.children( node_index )?;
+        let Some( index ) = children.last() else {
+            return Err( "Has no children".to_string() )
+        };
+        Ok( *index )
+    }
+
+    /// Convenience method to obtain the node index of the nth child.
+    /// If node does not exists, `Err( String )` is returned.
+    /// Also `Err( String )` is returned is the node does not allow children.
+    /// 
+    /// # Examples
+    /// ```
+    /// use tree::{NodeFeatures, Tree};
+    /// 
+    /// let mut tree = Tree::new();
+    /// tree.insert( 624, NodeFeatures { allow_children: true, allow_data: true }, Box::new( 0 ) ).ok();
+    /// tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+    /// let child = tree.child( 0, 0 ).ok().unwrap();
+    /// assert_eq!( child, 1, "Has 1 child with index 1." );
+    /// ```
+    pub fn child( &self, node_index: usize, position: usize ) -> Result<usize, String> {
+        let children = self.children( node_index )?;
+        let Some( index ) = children.get( position ) else {
+            return Err( "Has no children".to_string() )
+        };
+        Ok( *index )
+    }
+
     /// Obtain the depth of the specified node from the root.
     /// If node does not exists, `Err( String )` is returned.
     /// 
@@ -754,6 +820,33 @@ mod tests {
         tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
         let children = tree.children( 0 ).ok().unwrap();
         assert_eq!( children.len(), 1, "Has 1 child." );
+    }
+
+    #[test]
+    fn first() {
+        let mut tree = Tree::new();
+        tree.insert( 713, NodeFeatures { allow_children: true, allow_data: true }, Box::new( 0 ) ).ok();
+        tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+        let first = tree.first( 0 ).ok().unwrap();
+        assert_eq!( first, 1, "First child is index 1." );
+    }
+
+    #[test]
+    fn last() {
+        let mut tree = Tree::new();
+        tree.insert( 42, NodeFeatures { allow_children: true, allow_data: true }, Box::new( 0 ) ).ok();
+        tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+        let last = tree.last( 0 ).ok().unwrap();
+        assert_eq!( last, 1, "Last child is index 1." );
+    }
+
+    #[test]
+    fn child() {
+        let mut tree = Tree::new();
+        tree.insert( 921, NodeFeatures { allow_children: true, allow_data: true }, Box::new( 0 ) ).ok();
+        tree.insert( 0, NodeFeatures { allow_children: false, allow_data: true }, Box::new( 0 ) ).ok();
+        let child = tree.child( 0, 0 ).ok().unwrap();
+        assert_eq!( child, 1, "Has 1 child with index 1." );
     }
 
     #[test]

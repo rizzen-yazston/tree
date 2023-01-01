@@ -1,7 +1,7 @@
 = Changelog
 Rizzen Yazston
 
-== i18n 0.2.0 (2022-11-27)
+== tree 0.2.0 (2022-11-27)
 
 * Added new method `len()` to obtain actual internal vector length, to help with creating iterators.
 
@@ -9,7 +9,7 @@ Rizzen Yazston
 
 * Altered `insert()` and `insert_at()` methods to use positions of deleted/taken nodes, if available, instead of increasing internal vector length.
 
-== i18n 0.1.0 (2022-11-26)
+== tree 0.1.0 (2022-11-26)
 
 * Added first implementation of `Tree` using `Any` trait.
 

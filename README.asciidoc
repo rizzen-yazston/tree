@@ -1,4 +1,4 @@
-= Internationalisation
+= Tree
 Rizzen Yazston
 
 Welcome to the Tree project.
@@ -17,7 +17,7 @@ Simply include the `tree-rizzen-yazston` crate in the `Cargo.toml` to make it av
 
 ```
 [dependencies]
-tree-rizzen-yazston = "0.2.0"
+tree-rizzen-yazston = "0.3.0"
 ```
 
 === Examples

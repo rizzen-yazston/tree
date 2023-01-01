@@ -1,6 +1,10 @@
 = Changelog
 Rizzen Yazston
 
+== tree 0.3.0 (2023-01-01)
+
+* Added new methods `first()`, `last()` and `child()`.
+
 == tree 0.2.0 (2022-11-27)
 
 * Added new method `len()` to obtain actual internal vector length, to help with creating iterators.

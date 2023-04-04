@@ -1,6 +1,28 @@
 = Changelog
 Rizzen Yazston
 
+== tree 0.4.0 (2023-04-??)
+
+WARNING: API breaking changes due error handling changed to use `TreeError`, and changing `NodeFeatures` to bitwise flags.
+
+* Separated `Tree` into own file `tree.rs`, and module use entries in `lib.rs`.
+
+* Added `error.rs` file containing the new `TreeError` enum, and changes errors to use `TreeError` instead.
+
+* Separated all the unit tests into own file in the `tests` directory.
+
+* Added a new field `data_type` to `Node` struct, to aid in down casting the `Any` data to the correct type.
+
+* Added new `data_type()` method to `Tree` struct to retrieve the data type of the node.
+
+* Added new `move_nodes()` method to move a tree part from one position to another position of the same tree.
+
+* Removed redundant `Box<>` usage.
+
+* Added Sqlite3 file for supported error language strings when using the `i18n-rizzen-yazston` crate.
+
+* Updated `Cargo.toml`, tests, examples and documentation.
+
 == tree 0.3.0 (2023-01-01)
 
 * Added new methods `first()`, `last()` and `child()`.

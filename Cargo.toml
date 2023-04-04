@@ -7,29 +7,16 @@ name = "tree-rizzen-yazston"
 version = "0.3.0"
 authors = ["Rizzen Yazston"]
 edition = "2021"
-rust-version = "1.65.0"
-description = "A Simple Tree Library using Any trait for data."
+rust-version = "1.68.2"
+description = "A Simple Tree Library using the Any trait for data."
 license = "BSD-3-Clause"
 readme = "README.asciidoc"
-# false prevents publishing while developing, else string of repository identfier
-publish = false
-
-# these keys are used when preparing to publish to 'crates.io'
-#documentation = "<url, default is docs.rs>"
-#homepage = "<url"
-# once public GitHub repository is used
-#repository = "<github url>"
-#'crates.io' has max 5 keywords, of max 20 characters [A-Za-z0-9_-] 
-#keywords = ["",...]
-#'crates.io' has max 5 categories, selected from `crates.io` list
-#categories = ["",...]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+repository = "https://github.com/rizzen-yazston/tree"
+keywords = ["tree"]
+categories = ["rust-pattern"]
 
 [dependencies]
 # None.
 
-# for [lib] and [[bin]], ensure name is present to prevent package name from being used.
-# name without the '-rizzen-yazston' suffix
 [lib]
 name = "tree"

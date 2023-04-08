@@ -6,12 +6,18 @@ use core::any::Any;
 
 /// Indicates that the node can have children.
 /// 
-///  Used for the `features` parameter of the `insert()` and `insert_at()` methods.
+///  Used for the `features` parameter of the [`insert`] and [`insert_at`] methods.
+/// 
+/// [`insert`]: Tree::insert
+/// [`insert_at`]: Tree::insert_at
 pub const ALLOW_CHILDREN: u8 = 0b00000001;
 
 /// Indicates that the node can have data.
 /// 
-///  Used for the `features` parameter of the `insert()` and `insert_at()` methods.
+///  Used for the `features` parameter of the [`insert`] and [`insert_at`] methods.
+/// 
+/// [`insert`]: Tree::insert
+/// [`insert_at`]: Tree::insert_at
 pub const ALLOW_DATA: u8 = 0b00000010;
 
 /// See the crate's information page for details regarding the struct.
@@ -45,25 +51,25 @@ impl Tree {
     /// Create a node, and append it to the end of the `node_index` node's children.
     /// 
     /// The `features` parameter specifies the features of the node in how it will behave. The features are bitwise
-    /// flags and can be selected, and simply or'ed (|) together when passing the selected features.
+    /// flags and can be selected, and simply or'ed (`|`) together when passing the selected features.
     /// 
     /// Available features are:
     /// 
-    /// - `ALLOW_CHILDREN`: indicates if the node can have children,
+    /// - [`ALLOW_CHILDREN`]: indicates if the node can have children,
     /// 
-    /// - `ALLOW_DATA`: indicates if the node can have data.
+    /// - [`ALLOW_DATA`]: indicates if the node can have data.
     /// 
     /// Both `node_type` and `data_type` are optional, though normally one of them is used, and are read-only once the
     /// node has been created. The node type is generally used when the data type of the node is not specified, or the
     /// data type. As these fields are not used internally of the `Tree` methods, they are of any type that implements
-    /// the `Any` trait, and thus allows greatest flexibility in how these two fields are used by the user of the
+    /// the [`Any`] trait, and thus allows greatest flexibility in how these two fields are used by the user of the
     /// `Tree`. The data type is used to indicate the type of data stored within in the node. 
     /// 
-    /// The data for the node is added or manipulated by using the `data_mut()` method.
+    /// The data for the node is added or manipulated by using the [`data_mut`] method.
     /// 
     /// If there is no root node for the tree, then the value of `node_index` will be discarded (ignored).
     /// 
-    /// If no error, the returned `usize` value is the index of the created node in the tree.
+    /// If no error, the returned [`usize`] value is the index of the created node in the tree.
     /// 
     /// # Examples
     /// 
@@ -74,6 +80,12 @@ impl Tree {
     /// tree.insert( 425, ALLOW_CHILDREN, None, None ).ok();
     /// assert_eq!( tree.count(), 1, "1 node is present." );
     /// ```
+    /// 
+    /// [`ALLOW_CHILDREN`]: ALLOW_CHILDREN
+    /// [`ALLOW_DATA`]: ALLOW_DATA
+    /// [`Any`]: core::any::Any
+    /// [`data_mut`]: Tree::data_mut
+    /// [`usize`]: usize
     pub fn insert(
         &mut self,
         node_index: usize,
@@ -134,26 +146,7 @@ impl Tree {
     /// Create a node and insert as a child to the `node_index` node at the `position` specified. The `position` must
     /// be in the range of 0 to number of children.
     /// 
-    /// The `features` parameter specifies the features of the node in how it will behave. The features are bitwise
-    /// flags and can be selected, and simply or'ed (|) together when passing the selected features.
-    /// 
-    /// Available features are:
-    /// 
-    /// - `ALLOW_CHILDREN`: indicates if the node can have children,
-    /// 
-    /// - `ALLOW_DATA`: indicates if the node can have data.
-    /// 
-    /// Both `node_type` and `data_type` are optional, though normally one of them is used, and are read-only once the
-    /// node has been created. The node type is generally used when the data type of the node is not specified, or the
-    /// data type. As these fields are not used internally of the `Tree` methods, they are of any type that implements
-    /// the `Any` trait, and thus allows greatest flexibility in how these two fields are used by the user of the
-    /// `Tree`. The data type is used to indicate the type of data stored within in the node. 
-    /// 
-    /// The data for the node is added or manipulated by using the `data_mut()` method.
-    /// 
-    /// If there is no root node for the tree, then the value of `node_index` will be discarded (ignored).
-    /// 
-    /// If no error, the returned `usize` value is the index of the created node in the tree.
+    /// See [`insert`] for usage details, as `insert_at` only differs with the additional `position` parameter.
     /// 
     /// # Examples
     /// 
@@ -166,6 +159,8 @@ impl Tree {
     /// tree.insert_at( 0, 0, ALLOW_CHILDREN, None, None ).ok();
     /// assert_eq!( tree.count(), 3, "3 nodes is present." );
     /// ```
+    /// 
+    /// [`insert`]: Tree::insert
     pub fn insert_at(
         &mut self,
         node_index: usize,
@@ -227,7 +222,13 @@ impl Tree {
         Ok( _index )
     }
 
-    /// Deletes a node from the tree, discarding any data in the node.
+    /// Deletes the specified node `node_index` from the tree.
+    /// 
+    /// # WARNING
+    /// 
+    /// This is a destructive method that destroys the data when deleting the node.
+    /// 
+    /// If wanting the data, use [`take`] method instead.
     /// 
     /// # Examples
     /// 
@@ -243,6 +244,8 @@ impl Tree {
     /// }
     /// assert_eq!( tree.count(), 0, "0 nodes are present." );
     /// ```
+    /// 
+    /// [`take`]: Tree::take
     pub fn delete( &mut self, node_index: usize ) -> Result<(), TreeError> {
         let mut _parent = None;
         {
@@ -279,7 +282,7 @@ impl Tree {
         Ok( () )
     }
 
-    /// Deletes a node from the tree, and return its data (if any).
+    /// Deletes the specified node `node_index` from the tree, and return its data (if any).
     /// 
     /// # Examples
     /// 
@@ -334,7 +337,9 @@ impl Tree {
 
     /// Clear the tree of all nodes.
     /// 
-    /// Warning: All data in the nodes will be destroyed.
+    /// # WARNING
+    /// 
+    /// All data in the nodes will be destroyed.
     /// 
     /// # Examples
     /// 
@@ -354,7 +359,11 @@ impl Tree {
 
     /// Move part of the tree from one position to another within the tree.
     /// 
-    /// Parameter `position` is optional, and thus `None` means append to end of children. 
+    /// The `destination` node must be able to have children, else move will not occur. Also the `source` node can't
+    /// already be an ancestor of `destination` node.
+    /// 
+    /// Parameter `position` is optional, and when passed as `None` the position is taken to be the last child of the
+    /// `destination` node.
     /// 
     /// # Examples
     /// 
@@ -464,7 +473,7 @@ impl Tree {
 
     // -- information methods --
 
-    /// Check is node exists.
+    /// Check if `node_index` exists in the tree.
     /// 
     /// # Examples
     /// 
@@ -485,7 +494,7 @@ impl Tree {
         false
     }
 
-    /// Obtain reference to the node type for the specified node.
+    /// Obtain reference to the node type for the specified node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -505,7 +514,7 @@ impl Tree {
         Ok( &index_node.node_type )
     }
 
-    /// Obtain reference to the node features for the specified node.
+    /// Obtain reference to the node's features for the specified node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -526,7 +535,7 @@ impl Tree {
         Ok( &index_node.features )
     }
 
-    /// Obtain reference to the node parent for the specified node.
+    /// Obtain reference to the node's immediate parent for the specified node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -548,8 +557,8 @@ impl Tree {
         Ok( *index_node.parent.as_ref().unwrap() )
     }
 
-    /// Determine if a node is an ancestor of the specified node. This method will iterate through the parents until
-    /// the root node.
+    /// Determine if a node `is_ancestor` is an ancestor of the specified node `node_index`. This method will iterate
+    /// through the parents until the root node.
     /// 
     /// `true` is returned if the node is found to be ancestor of the specified node, else `false` is returned.
     /// 
@@ -569,8 +578,8 @@ impl Tree {
     /// result = tree.is_ancestor_of( 3, 2 ).unwrap();
     /// assert!( !result, "Node 2 is not a parent of node 3." );
     /// ```
-    pub fn is_ancestor_of( &self, node: usize, is_ancestor: usize ) -> Result<bool, TreeError> {
-        let parent = match self.parent( node ) {
+    pub fn is_ancestor_of( &self, node_index: usize, is_ancestor: usize ) -> Result<bool, TreeError> {
+        let parent = match self.parent( node_index ) {
             Ok( result ) => result,
             Err( error ) => return match error {
                 TreeError::RootHasNoParent( _ ) => Ok( false ),
@@ -583,7 +592,7 @@ impl Tree {
         Ok( self.is_ancestor_of( parent, is_ancestor )? )
     }
 
-    /// Obtain reference to the node children for the specified node.
+    /// Obtain reference to the node children for the specified node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -606,7 +615,7 @@ impl Tree {
         Ok( &index_node.children.as_ref().unwrap() )
     }
 
-    /// Convenience method to obtain the node index of the first child.
+    /// Convenience method to obtain the first child of the node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -627,7 +636,7 @@ impl Tree {
         Ok( *index )
     }
 
-    /// Convenience method to obtain the node index of the last child.
+    /// Convenience method to obtain the last child of the node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -648,7 +657,7 @@ impl Tree {
         Ok( *index )
     }
 
-    /// Convenience method to obtain the node index of the nth child.
+    /// Convenience method to obtain the nth child `position` of the node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -669,7 +678,7 @@ impl Tree {
         Ok( *index )
     }
 
-    /// Obtain the depth of the specified node from the root.
+    /// Obtain the depth of the specified node `node_index` from the root.
     /// 
     /// # Examples
     /// 
@@ -700,9 +709,9 @@ impl Tree {
         }
     }
 
-    /// Get length of internal vector of nodes, including the empty nodes (deleted).
+    /// Get length of internal vector of nodes, including the empty nodes (deleted/taken).
     /// 
-    /// For actual number of nodes, use `count()` method.
+    /// For actual number of nodes in the tree, use [`count`] method.
     /// 
     /// # Examples
     /// 
@@ -719,6 +728,8 @@ impl Tree {
     /// assert_eq!( tree.count(), 1, "Has 1 node." );
     /// assert_eq!( tree.len(), 2, "Internal vector is 2." );
     /// ```
+    /// 
+    /// [`count`]: Tree::count
     pub fn len( &self ) -> usize {
         self.nodes.len()
     }
@@ -741,7 +752,7 @@ impl Tree {
 
     // -- Data methods --
 
-    /// Obtain mutable reference to the node data for the specified node.
+    /// Obtain a mutable reference to the node's data for the specified node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -773,7 +784,7 @@ impl Tree {
         Ok( index_node.data.as_mut().unwrap() )
     }
 
-    /// Obtain reference to the node data for the specified node.
+    /// Obtain an immutable reference to the node's data for the specified node `node_index`.
     /// 
     /// # Examples
     /// 
@@ -797,7 +808,7 @@ impl Tree {
         Ok( &index_node.data.as_ref().unwrap() )
     }
 
-    /// Obtain reference to the data type for the specified node.
+    /// Obtain reference to the data type for the specified node `node_index`.
     /// 
     /// # Examples
     /// 

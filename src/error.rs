@@ -23,31 +23,31 @@ impl Display for TreeError {
     fn fmt( &self, formatter: &mut Formatter ) -> Result {
         match self {
             TreeError::RetrievingNode( index ) =>
-                write!( formatter, "Failed to retrieve the node for index {}.", index ),
+                write!( formatter, "Failed to retrieve the node for the index {}.", index ),
             TreeError::NoChildrenAllowed( index ) =>
-                write!( formatter, "No children allowed for the node {}.", index ),
+                write!( formatter, "No children is allowed for the node {}.", index ),
             TreeError::ExceedsChildren( position, index ) =>
-                write!( formatter, "Position {} exceeds length of children for node {}.", position, index ),
+                write!( formatter, "Position {} exceeds length of children for the node {}.", position, index ),
             TreeError::HasChildren( index ) =>
-                write!( formatter, "Can't delete node {} as it has children.", index ),
+                write!( formatter, "Can't delete the node {} as it still has children.", index ),
             TreeError::MissingInParent( index, parent ) =>
-                write!( formatter, "Node {} is missing in the children of its parent {}.", index, parent ),
+                write!( formatter, "The node {} is missing in the children of its parent {}.", index, parent ),
             TreeError::RootHasNoParent( index ) =>
-                write!( formatter, "Root node {} can't have parent.", index ),
+                write!( formatter, "The root node {} can't have a parent.", index ),
             TreeError::NoChildrenFound( index ) =>
-                write!( formatter, "No children found for the node {}.", index ),
+                write!( formatter, "No children were found for the node {}.", index ),
             TreeError::NoDataAllowed( index ) =>
-                write!( formatter, "No data allowed for the node {}.", index ),
+                write!( formatter, "No data is allowed for the node {}.", index ),
             TreeError::NotAncestorOf( index,is_ancestor, ref error ) =>
                 write!(
                     formatter,
-                    "Node {} is not an ancestor of node {}. Error is: ‘{:#?}’.",
+                    "The node {} is not an ancestor of node {}. The error is: ‘{:#?}’.",
                     is_ancestor,
                     index,
                     error,
                 ),
             TreeError::IsAncestorOf( index,is_ancestor ) =>
-                write!( formatter, "Node {} is an ancestor of node {}.", is_ancestor, index, ),
+                write!( formatter, "The node {} is an ancestor of the node {}.", is_ancestor, index, ),
         }
     }
 }

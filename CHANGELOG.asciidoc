@@ -1,7 +1,7 @@
 = Changelog
 Rizzen Yazston
 
-== tree 0.4.0 (2023-04-??)
+== tree 0.4.0 (2023-04-08)
 
 WARNING: API breaking changes due error handling changed to use `TreeError`, and changing `NodeFeatures` to bitwise flags.
 
@@ -19,7 +19,7 @@ WARNING: API breaking changes due error handling changed to use `TreeError`, and
 
 * Removed redundant `Box<>` usage.
 
-* Added Sqlite3 file for supported error language strings when using the `i18n-rizzen-yazston` crate.
+* Added Sqlite3 file for supported error language strings when using the `i18n-rizzen-yazston` crate, and its documentation.
 
 * Updated `Cargo.toml`, tests, examples and documentation.
 
